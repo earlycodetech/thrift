@@ -33,13 +33,13 @@ export function Home () {
                         <View style={styles.transActionsBox}>
                             <TouchableOpacity style={styles.deposit}>
                                 <Text style={styles.depositText}>Deposit</Text>
-                                <FontAwesomeIcon icon={faCreditCard} 
+                                <FontAwesomeIcon icon={faCreditCardAlt} 
                                 size={Theme.fonts.fontSizePoint.h3}
                                 color={Theme.colors.maroon700}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.withdraw}>
                                 <Text style={styles.withdrawText}>Withdraw</Text>
-                                <FontAwesomeIcon icon={faCreditCardAlt} 
+                                <FontAwesomeIcon icon={faCreditCard} 
                                 size={Theme.fonts.fontSizePoint.h3}
                                 color={Theme.colors.maroon700}/>
                             </TouchableOpacity>
