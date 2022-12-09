@@ -97,7 +97,7 @@ export function Signup() {
                     mode="outlined"
                     outlineColor={Theme.colors.purple300}
                     activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[3]}}
                     secureTextEntry={true}/>
 
                     <Button
@@ -128,7 +128,8 @@ const styles = StyleSheet.create({
         borderColor:Theme.colors.purple300,
         borderRadius:6,
         paddingVertical:Theme.sizes[2],
-        marginTop:Theme.sizes[2]
+        marginTop:Theme.sizes[2],
+        marginBottom:Theme.sizes[3]
     },
     infoTitle:{
         fontSize:Theme.fonts.fontSizePoint.h5
