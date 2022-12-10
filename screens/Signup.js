@@ -9,7 +9,7 @@ import { Button, TextInput } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 
-export function Signup() {
+export function Signup({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
 
     useEffect(() => {
@@ -46,7 +46,7 @@ export function Signup() {
 
                 <View style={styles.alreadyHaveAccount}>
                     <Text style={styles.infoTitle}>Already have an account?</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Sign in')}>
                         <FontAwesomeIcon icon={faCircleArrowRight}
                         color={Theme.colors.purple700}
                         size={Theme.sizes[5]}/>
