@@ -8,6 +8,8 @@ export const Theme = {
       maroon700:'#790252',
       maroon500:'#AF0171',
       maroon300:'#E80F88',
+      maroon200:'#FFC4C4',
+      maroon100:'#F5E8E4',
       blue900:'#002E94',
       blue700:'#083AA9'
     },

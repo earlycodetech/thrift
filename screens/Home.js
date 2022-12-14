@@ -1,16 +1,16 @@
-// +++++++++++++++++++++++++++++++++++++++++++++++
-// +++ Simply copy the whole of this code and ++++
-// +++ replace your Home.js with it. +++++++++++++
-// +++ Ensure you study the code!! +++++++++++++++
-
 import { View,Text,TouchableOpacity,StyleSheet,Image } from 'react-native';
 import { SafeArea } from '../utils/safearea';
 import { Theme } from '../utils/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCreditCard,faWallet } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard,faWallet, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
 import { faCreditCard as faCreditCardAlt } from '@fortawesome/free-regular-svg-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Deposit } from './Deposit';
+import { History } from './History';
+import { Profile } from './Profile';
 
-export function Home () {
+function Home () {
     return (
         <SafeArea>
             <View style={styles.container}>
@@ -52,7 +52,10 @@ export function Home () {
                 </View>
 
                 <View style={styles.transactions}>
-                    
+                    <View style={styles.recentTrans}>
+                        <FontAwesomeIcon />
+                        <Text style={styles.recentTransText}>Recent transactions</Text>
+                    </View>
                 </View>
 
                 <View style={styles.loan}>
@@ -60,6 +63,43 @@ export function Home () {
                 </View>
             </View>
         </SafeArea>
+    )
+}
+
+//this functional component handle bottom tabs navigator
+const Tab = createBottomTabNavigator();
+
+export function MyHome () {
+
+    return (
+        <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName;
+
+            if (route.name === 'Home') {
+              iconName = focused
+                ? 'home-sharp'
+                : 'home-outline';
+            } else if (route.name === 'Deposit') {
+              iconName = focused ? 'add-circle' : 'add-circle-outline';
+            } else if (route.name === 'History') {
+                iconName = focused ? 'file-tray-full' : 'file-tray-full-outline';
+            } else if (route.name === 'Profile') {
+                iconName = focused ? 'person-circle-sharp' : 'person-circle-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: Theme.colors.maroon300,
+          tabBarInactiveTintColor: Theme.colors.maroon700,
+        })}
+      >
+        <Tab.Screen name="Home" component={Home} options={{headerShown:false}}/>
+        <Tab.Screen name="Deposit" component={Deposit} options={{headerShown:false}}/>
+        <Tab.Screen name="History" component={History} options={{headerShown:false}}/>
+        <Tab.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
+      </Tab.Navigator>
     )
 }
 
@@ -156,7 +196,11 @@ const styles = StyleSheet.create({
     },
     transactions:{
         flex:1.8,
-        backgroundColor:'blue'
+        borderWidth:1,
+        borderColor:Theme.colors.maroon200,
+        padding:Theme.sizes[2],
+        borderRadius:10,
+        marginVertical:Theme.sizes[2]
     },
     loan:{
         flex:0.6,
