@@ -8,6 +8,35 @@ import { Righteous_400Regular } from "@expo-google-fonts/righteous";
 import { Button, TextInput } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Formik } from "formik";
+import * as yup from 'yup';
+
+const formRules = yup.object({
+    lastName:yup.string('invalid characters')
+    .min(2,'must be at least 2 characters')
+    .max(32,'not more than 32 characters')
+    .required('This is a compulsory field'),
+
+    firstName:yup.string('invalid characters')
+    .min(2,'must be at least 2 characters')
+    .max(32,'not more than 32 characters')
+    .required('This is a compulsory field'),
+
+    phoneNumber:yup.string('invalid characters')
+    .min(11,'must be up to 11 numbers')
+    .max(17,'must not be more than 17 number')
+    .required('This is a compulsory field'),
+
+    email:yup.string('invalid characters')
+    .email('must be an email')
+    .max(60,'not more than 32 characters')
+    .required('This is a compulsory field'),
+
+    password:yup.string('invalid characters')
+    .min(8,'must be up to 8 numbers')
+    .required('This is a compulsory field')
+    .oneOf([yup.ref('passwordConfirmation'),null],'passwords must match')
+})
 
 export function Signup({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
@@ -52,59 +81,116 @@ export function Signup({navigation}) {
                         size={Theme.sizes[5]}/>
                     </TouchableOpacity>
                 </View>
-
-                <View style={styles.form}>
-                    <TextInput 
-                    placeholder="Last name"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}/>
+                
+                    <Formik
+                    initialValues={{
+                        lastName:'',
+                        firstName:'',
+                        phoneNumber:'',
+                        email:'',
+                        password:'',
+                        passwordConfirmation:''
+                    }}
                     
-                    <TextInput 
-                    placeholder="First name"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}/>
-                    
-                    <TextInput 
-                    placeholder="Phone number"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
-                    keyboardType='phone-pad'/>
-                    
-                    <TextInput 
-                    placeholder="email address"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
-                    keyboardType='email-address'/>
-                 
-                    <TextInput 
-                    placeholder="create password"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
-                    secureTextEntry={true}/>
+                    onSubmit={(values,action) => {
+                        console.log(values.lastName);
 
-                    <TextInput 
-                    placeholder="confirm password"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[3]}}
-                    secureTextEntry={true}/>
+                        action.resetForm();//clear inputs
+                    }}
 
-                    <Button
-                    mode="contained"
-                    color={Theme.colors.purple700}
-                    contentStyle={{paddingVertical:Theme.sizes[3]}}>Create Acccount</Button>
-                </View>
+                    validationSchema={formRules}>
+                        {({ handleChange, handleBlur, handleSubmit, values, errors,touched }) => {
+                            return (
+                                <View style={styles.form}>
+                                    <TextInput 
+                                    placeholder="Last name"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    onChangeText={handleChange('lastName')}
+                                    onBlur={handleBlur('lastName')}
+                                    value={values.lastName}/>
+                                    <Text style={{display:touched.lastName && errors.lastName ? 'flex' : 'none', color:'red'}}>
+                                        {touched.lastName && errors.lastName}
+                                    </Text>
+                                    
+                                    <TextInput 
+                                    placeholder="First name"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    onChangeText={handleChange('firstName')}
+                                    onBlur={handleBlur('firstName')}
+                                    value={values.firstName}/>
+                                    <Text style={{display:touched.firstName && errors.firstName ? 'flex' : 'none', color:'red'}}>
+                                        {touched.firstName && errors.firstName}
+                                    </Text>
+                                    
+                                    <TextInput 
+                                    placeholder="Phone number"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    keyboardType='phone-pad'
+                                    onChangeText={handleChange('phoneNumber')}
+                                    onBlur={handleBlur('phoneNumber')}
+                                    value={values.phoneNumber}/>
+                                    <Text style={{display:touched.phoneNumber && errors.phoneNumber ? 'flex' : 'none', color:'red'}}>
+                                        {touched.phoneNumber && errors.phoneNumber}
+                                    </Text>
+                                    
+                                    <TextInput 
+                                    placeholder="email address"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    keyboardType='email-address'
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}/>
+                                    <Text style={{display:touched.email && errors.email ? 'flex' : 'none', color:'red'}}>
+                                        {touched.email && errors.email}
+                                    </Text>
+                                
+                                    <TextInput 
+                                    placeholder="create password"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    secureTextEntry={true}
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    value={values.password}/>
+                                    <Text style={{display:touched.password && errors.password ? 'flex' : 'none', color:'red'}}>
+                                        {touched.password && errors.password}
+                                    </Text>
+
+                                    <TextInput 
+                                    placeholder="confirm password"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[3]}}
+                                    secureTextEntry={true}
+                                    onChangeText={handleChange('passwordConfirmation')}
+                                    onBlur={handleBlur('passwordConfirmation')}
+                                    value={values.passwordConfirmation}/>
+
+                                    <Button
+                                    mode="contained"
+                                    color={Theme.colors.purple700}
+                                    contentStyle={{paddingVertical:Theme.sizes[3]}}
+                                    onPress={handleSubmit}>Create Acccount</Button>
+                                </View>
+                            )
+                        }}
+                    </Formik>
+            
             </ScrollView>
         </SafeArea>
     )
