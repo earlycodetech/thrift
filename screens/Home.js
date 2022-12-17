@@ -1,3 +1,5 @@
+import { useContext } from 'react';
+import { AppContext } from '../utils/globals';
 import { View,Text,TouchableOpacity,StyleSheet,Image } from 'react-native';
 import { SafeArea } from '../utils/safearea';
 import { Theme } from '../utils/theme';
@@ -10,13 +12,15 @@ import { Deposit } from './Deposit';
 import { History } from './History';
 import { Profile } from './Profile';
 
-function Home () {
+function Home ({navigation}) {
+    const {email} = useContext(AppContext);
+
     return (
         <SafeArea>
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.profile}>
-                        <Text style={styles.welcomeNote}>Hello, Jane</Text>
+                        <Text style={styles.welcomeNote}>Hello, {email}</Text>
                         <Image source={require('../assets/profile-pix.jpg')} 
                         style={styles.profileImg}/>
                     </View>
@@ -31,7 +35,8 @@ function Home () {
                             <FontAwesomeIcon icon={faWallet} color='#fff' size={Theme.sizes[4]}/>
                         </View>
                         <View style={styles.transActionsBox}>
-                            <TouchableOpacity style={styles.deposit}>
+                            <TouchableOpacity style={styles.deposit}
+                            onPress={() => navigation.navigate('Deposit')}>
                                 <Text style={styles.depositText}>Deposit</Text>
                                 <FontAwesomeIcon icon={faCreditCardAlt} 
                                 size={Theme.fonts.fontSizePoint.h3}
@@ -53,7 +58,7 @@ function Home () {
 
                 <View style={styles.transactions}>
                     <View style={styles.recentTrans}>
-                        <FontAwesomeIcon />
+                        {/* <FontAwesomeIcon /> */}
                         <Text style={styles.recentTransText}>Recent transactions</Text>
                     </View>
                 </View>
