@@ -13,14 +13,14 @@ import { History } from './History';
 import { Profile } from './Profile';
 
 function Home ({navigation}) {
-    const {email} = useContext(AppContext);
+    const {userNames} = useContext(AppContext);
 
     return (
         <SafeArea>
             <View style={styles.container}>
                 <View style={styles.header}>
                     <View style={styles.profile}>
-                        <Text style={styles.welcomeNote}>Hello, {email}</Text>
+                        <Text style={styles.welcomeNote}>Hello, {userNames.fname}</Text>
                         <Image source={require('../assets/profile-pix.jpg')} 
                         style={styles.profileImg}/>
                     </View>

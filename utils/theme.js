@@ -11,7 +11,11 @@ export const Theme = {
       maroon200:'#FFC4C4',
       maroon100:'#F5E8E4',
       blue900:'#002E94',
-      blue700:'#083AA9'
+      blue700:'#083AA9',
+      gray50:'#EEEEEE',
+      gray100:'#DDDDDD',
+      gray200:'#7F8487',
+      gray500:'#413F42'
     },
     sizes: [0, 4, 8, 16, 32,64,128],
     fonts: {

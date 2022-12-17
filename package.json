@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/passions-conflict": "^0.2.2",
     "@expo-google-fonts/righteous": "^0.2.2",
     "@expo/vector-icons": "^13.0.0",
     "@fortawesome/fontawesome-svg-core": "^6.2.1",
