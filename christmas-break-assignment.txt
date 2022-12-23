@@ -1,0 +1,19 @@
+Refer to the home-screen-new-ui.jg on Main branch
+
+Start by making the following changes
+On Home.js
+1. Remove <View style={styles.loan}></View>
+2. Go to styles at the bottom, locate header and increase flex to 2.2, and locate events and change flex value to to 2.0
+
+Back to the design ...
+The "urban music" image is available in a folder I have uploaded with the name events.zip 
+You need to unzip the file after downloading and copy and paste the folder to your project assets folder
+
+For "Recent transactions" section
+1. The "View all" should take the user to History screen when touched.
+2. Use Fontawesome icons for the icons on each transactions
+3. To get the Naira symbol, seach with "Naira symbol" on Google, then copy and paste
+
+Get your code and UI looking as neat as possible.
+
+Please check this comment section below in a few days for additional assignments
