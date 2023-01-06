@@ -1,19 +1,27 @@
 import { useContext } from 'react';
 import { AppContext } from '../utils/globals';
-import { View,Text,TouchableOpacity,StyleSheet,Image } from 'react-native';
+import { View,Text,TouchableOpacity,StyleSheet,Image,Dimensions } from 'react-native';
 import { SafeArea } from '../utils/safearea';
 import { Theme } from '../utils/theme';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faCreditCard,faWallet, faClockRotateLeft } from '@fortawesome/free-solid-svg-icons';
+import { faCreditCard,faWallet, faUser,faUpLong,faDownLong } from '@fortawesome/free-solid-svg-icons';
 import { faCreditCard as faCreditCardAlt } from '@fortawesome/free-regular-svg-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Deposit } from './Deposit';
 import { History } from './History';
 import { Profile } from './Profile';
+import Carousel from 'react-native-reanimated-carousel';
+
+const carouselImgUrl = [
+    require('../assets/events/diabetes-day.jpg'),
+    require('../assets/events/marketing-agency.jpg'),
+    require('../assets/events/urban-music.jpg')
+]
 
 function Home ({navigation}) {
     const {userNames} = useContext(AppContext);
+    const screenWidth = Dimensions.get('screen').width; //for carousel
 
     return (
         <SafeArea>
@@ -53,18 +61,63 @@ function Home ({navigation}) {
                 </View>
 
                 <View style={styles.events}>
-                
+                    <Carousel
+                        loop
+                        width={screenWidth - 20}
+                        height='100%'
+                        autoPlay={true}
+                        data={carouselImgUrl}
+                        scrollAnimationDuration={2000}
+                        renderItem={({ index }) => (
+                            <Image 
+                            style={styles.eventImg} 
+                            source={carouselImgUrl[index]}/>
+                        )}
+                    />
                 </View>
 
                 <View style={styles.transactions}>
-                    <View style={styles.recentTrans}>
-                        {/* <FontAwesomeIcon /> */}
+                    <View style={styles.recentTransHeader}>
                         <Text style={styles.recentTransText}>Recent transactions</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('History')}>
+                            <Text style={styles.recentTransTextCta}>View all</Text>
+                        </TouchableOpacity>
                     </View>
-                </View>
 
-                <View style={styles.loan}>
-                
+                    <View>
+                        <View style={styles.transLog}>
+                            <FontAwesomeIcon icon={faUser} size={20} style={{marginRight:Theme.sizes[2]}}/>
+                            <View style={styles.transLogDetails}>
+                                <View>
+                                    <Text style={styles.transLogDetailsTitle}>Deposit to self</Text>
+                                    <Text style={styles.transLogDetailsDate}>23/12/22 at 13:38</Text>
+                                </View>
+                                <Text style={styles.transLogDetailsAmount}>₦45000</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.transLog}>
+                            <FontAwesomeIcon icon={faUpLong} size={20} style={{marginRight:Theme.sizes[2]}}/>
+                            <View style={styles.transLogDetails}>
+                                <View>
+                                    <Text style={styles.transLogDetailsTitle}>Transfer to Johnson</Text>
+                                    <Text style={styles.transLogDetailsDate}>22/12/22 at 16:01</Text>
+                                </View>
+                                <Text style={styles.transLogDetailsAmount}>₦15000</Text>
+                            </View>
+                        </View>
+
+                        <View style={styles.transLog}>
+                            <FontAwesomeIcon icon={faDownLong} size={20} style={{marginRight:Theme.sizes[2]}}/>
+                            <View style={styles.transLogDetails}>
+                                <View>
+                                    <Text style={styles.transLogDetailsTitle}>Transfer from Ada</Text>
+                                    <Text style={styles.transLogDetailsDate}>18/11/22 at 22:14</Text>
+                                </View>
+                                <Text style={styles.transLogDetailsAmount}>₦8000</Text>
+                            </View>
+                        </View>
+                    </View>
                 </View>
             </View>
         </SafeArea>
@@ -113,7 +166,7 @@ const styles = StyleSheet.create({
         flex:1
     },
     header:{
-        flex:1.8
+        flex:2
     },
     profile:{
         flex:1,
@@ -196,8 +249,12 @@ const styles = StyleSheet.create({
         color:Theme.colors.maroon700
     },
     events:{
-        flex:1.8,
-        backgroundColor:'orange'
+        flex:2,
+    },
+    eventImg:{
+        width:'100%',
+        height:'100%',
+        borderRadius:10
     },
     transactions:{
         flex:1.8,
@@ -207,8 +264,34 @@ const styles = StyleSheet.create({
         borderRadius:10,
         marginVertical:Theme.sizes[2]
     },
-    loan:{
-        flex:0.6,
-        backgroundColor:'red'
+    recentTransHeader:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginBottom:Theme.sizes[3]
+    },
+    recentTransText:{
+        fontSize:Theme.fonts.fontSizePoint.title
+    },
+    recentTransTextCta:{
+        fontSize:Theme.fonts.fontSizePoint.title,
+        color:Theme.colors.maroon500
+    },
+    transLog:{
+        flexDirection:'row',
+        marginBottom:Theme.sizes[3],
+        alignItems:'center'
+    },
+    transLogDetails:{
+        flex:1,
+        flexDirection:'row',
+        justifyContent:'space-between'
+    },
+    transLogDetailsTitle:{
+        fontWeight:'bold',
+        fontSize:Theme.fonts.fontSizePoint.title,
+        color:Theme.colors.maroon700
+    },
+    transLogDetailsAmount:{
+        fontSize:Theme.fonts.fontSizePoint.h5
     }
 })
