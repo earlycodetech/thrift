@@ -1,15 +1,16 @@
 import { AppContext } from '../utils/globals';
 import { useState,useEffect,useCallback,useContext } from "react";
 import { SafeArea } from "../utils/safearea";
-import { View,Text,StyleSheet,ScrollView,TouchableOpacity, Image } from "react-native";
+import { View,Text,StyleSheet, Image } from "react-native";
 import { Theme } from '../utils/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
 import { PassionsConflict_400Regular } from "@expo-google-fonts/passions-conflict";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
+import { Button } from 'react-native-paper';
 
-export function Profile () {
+export function Profile ({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
     const {userNames} = useContext(AppContext);
 
@@ -74,9 +75,12 @@ export function Profile () {
 
                 <Text style={styles.userStatement}>During summer holidays I have 
                 applied what I learned in classes by working for three years in 
-                an accounting firm. This has been a wonderful complement to my 
-                studies, as it has refreshed my perspective and taught me about 
-                the realities of a workplace such as this.</Text>
+                an accounting firm. </Text>
+
+                <Button
+                mode='contained'
+                color={Theme.colors.maroon700}
+                >Update Profile</Button>
             </View>
         </SafeArea>
     )
@@ -134,6 +138,7 @@ const styles = StyleSheet.create({
         fontSize:Theme.fonts.fontSizePoint.h5,
     },
     userStatement:{
-        fontSize:Theme.fonts.fontSizePoint.body
+        fontSize:Theme.fonts.fontSizePoint.body,
+        marginBottom:Theme.sizes[2]
     }
 })

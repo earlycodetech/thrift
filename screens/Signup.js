@@ -1,6 +1,7 @@
-import { useState,useEffect,useCallback } from "react";
+import { useState,useEffect,useCallback,useContext } from "react";
+import { AppContext } from "../utils/globals";
 import { SafeArea } from "../utils/safearea";
-import { View,Text,StyleSheet,ScrollView, TouchableOpacity } from "react-native";
+import { View,Text,StyleSheet,ScrollView, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Theme } from '../utils/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -42,6 +43,8 @@ const formRules = yup.object({
 
 export function Signup({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
+    const [loading,setLoading] = useState(false); //for ActivityIndicator
+    const {setUid,setEmail,setUserNames} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
@@ -96,11 +99,17 @@ export function Signup({navigation}) {
                     
                     onSubmit={(values,action) => {
                         //from here
+                        setLoading(true);
                         createUserWithEmailAndPassword(authentication,values.email,values.password)
                         .then(() => {
                             //get the user UID
                             onAuthStateChanged(authentication,user => {
-                                console.log('the user UID is',user.uid);
+                                setEmail(values.email);
+                                setUid(user.uid);
+                                setUserNames({fname:values.firstName,lname:values.lastName});
+
+                                //redirect to home screen
+                                navigation.navigate('My Home');
                             });
                         })
                         .catch(); //to here
@@ -112,6 +121,8 @@ export function Signup({navigation}) {
                         {({ handleChange, handleBlur, handleSubmit, values, errors,touched }) => {
                             return (
                                 <View style={styles.form}>
+                                    {loading ? <ActivityIndicator size='large' color={Theme.colors.purple900}/> : null}
+
                                     <TextInput 
                                     placeholder="Last name"
                                     mode="outlined"
@@ -195,7 +206,11 @@ export function Signup({navigation}) {
                                     mode="contained"
                                     color={Theme.colors.purple700}
                                     contentStyle={{paddingVertical:Theme.sizes[3]}}
-                                    onPress={handleSubmit}>Create Acccount</Button>
+                                    onPress={() => {
+                                        handleSubmit();
+                                    }}>
+                                        Create Acccount 
+                                    </Button>
                                 </View>
                             )
                         }}
