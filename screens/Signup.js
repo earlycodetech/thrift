@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { Formik } from "formik";
 import * as yup from 'yup';
+import { authentication } from "../firebase/firebase.settings"; //this
+import { createUserWithEmailAndPassword,onAuthStateChanged } from "firebase/auth"; //this
 
 const formRules = yup.object({
     lastName:yup.string('invalid characters')
@@ -93,7 +95,15 @@ export function Signup({navigation}) {
                     }}
                     
                     onSubmit={(values,action) => {
-                        console.log(values.lastName);
+                        //from here
+                        createUserWithEmailAndPassword(authentication,values.email,values.password)
+                        .then(() => {
+                            //get the user UID
+                            onAuthStateChanged(authentication,user => {
+                                console.log('the user UID is',user.uid);
+                            });
+                        })
+                        .catch(); //to here
 
                         action.resetForm();//clear inputs
                     }}
