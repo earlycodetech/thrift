@@ -1,6 +1,7 @@
-import { useState,useEffect,useCallback } from "react";
+import { useState,useEffect,useCallback,useContext } from "react";
+import { AppContext } from "../utils/globals";
 import { SafeArea } from "../utils/safearea";
-import { View,Text,StyleSheet,ScrollView, TouchableOpacity } from "react-native";
+import { View,Text,StyleSheet,ScrollView, TouchableOpacity,ActivityIndicator } from "react-native";
 import { Theme } from '../utils/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -8,9 +9,25 @@ import { Righteous_400Regular } from "@expo-google-fonts/righteous";
 import { Button, TextInput } from "react-native-paper";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCircleArrowRight } from "@fortawesome/free-solid-svg-icons";
+import { Formik } from "formik";
+import * as yup from 'yup';
+import { authentication } from "../firebase/firebase.settings";
+import { signInWithEmailAndPassword,onAuthStateChanged } from "firebase/auth";
+
+const formRules = yup.object({
+    email:yup.string('invalid characters')
+    .email('must be an email')
+    .max(60,'not more than 32 characters')
+    .required('This is a compulsory field'),
+
+    password:yup.string('invalid characters')
+    .required('This is a compulsory field')
+})
 
 export function Signin({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
+    const [loading,setLoading] = useState(false); //for ActivityIndicator
+    const {setUid,setEmail} = useContext(AppContext);
 
     useEffect(() => {
         async function prepare() {
@@ -52,28 +69,80 @@ export function Signin({navigation}) {
                     </TouchableOpacity>
                 </View>
 
-                <View style={styles.form}>
-                    <TextInput 
-                    placeholder="email address"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
-                    keyboardType='email-address'/>
-                 
-                    <TextInput 
-                    placeholder="password"
-                    mode="outlined"
-                    outlineColor={Theme.colors.purple300}
-                    activeOutlineColor={Theme.colors.purple500}
-                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
-                    secureTextEntry={true}/>
+                <Formik
+                    initialValues={{
+                        email:'',
+                        password:'',
+                    }}
+                    
+                    onSubmit={(values,action) => {
+                        //from here
+                        setLoading(true);
+                        signInWithEmailAndPassword(authentication,values.email,values.password)
+                        .then(() => {
+                            //get the user UID
+                            onAuthStateChanged(authentication,user => {
+                                setEmail(values.email);
+                                setUid(user.uid);
 
-                    <Button
-                    mode="contained"
-                    color={Theme.colors.blue900}
-                    contentStyle={{paddingVertical:Theme.sizes[3]}}>Sign In</Button>
-                </View>
+                                //redirect to home screen
+                                navigation.navigate('My Home');
+                            });
+                        })
+                        .catch(error => {
+                            setLoading(false)
+                        }); //to here
+
+                        action.resetForm();//clear inputs
+                    }}
+
+                    validationSchema={formRules}>
+                        {({ handleChange, handleBlur, handleSubmit, values, errors,touched }) =>{
+                            return (
+                                <View style={styles.form}>
+                                    {loading ? <ActivityIndicator size='large' color={Theme.colors.purple900}/> : null}
+
+                                    <TextInput 
+                                    placeholder="email address"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    keyboardType='email-address'
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}/>
+                                    <Text style={{display:touched.email && errors.email ? 'flex' : 'none', color:'red'}}>
+                                        {touched.email && errors.email}
+                                    </Text>
+                                
+                                    <TextInput 
+                                    placeholder="create password"
+                                    mode="outlined"
+                                    outlineColor={Theme.colors.purple300}
+                                    activeOutlineColor={Theme.colors.purple500}
+                                    style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
+                                    secureTextEntry={true}
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    value={values.password}/>
+                                    <Text style={{display:touched.password && errors.password ? 'flex' : 'none', color:'red'}}>
+                                        {touched.password && errors.password}
+                                    </Text>
+
+                                    <Button
+                                    mode="contained"
+                                    color={Theme.colors.purple700}
+                                    contentStyle={{paddingVertical:Theme.sizes[3]}}
+                                    onPress={() => {
+                                        handleSubmit();
+                                    }}>
+                                        Sign In
+                                    </Button>
+                                </View>
+                            )
+                        }}
+                    </Formik>
             </ScrollView>
         </SafeArea>
     )

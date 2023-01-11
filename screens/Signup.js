@@ -73,7 +73,7 @@ export function Signup({navigation}) {
 
     return (
         <SafeArea>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false}>
                 <Text style={styles.brand}>Thrift</Text>
                 <Text style={styles.intro}>Create an account to join
                 Thrift cooperative society and enjoy tons of benefits</Text>
@@ -215,7 +215,6 @@ export function Signup({navigation}) {
                             )
                         }}
                     </Formik>
-            
             </ScrollView>
         </SafeArea>
     )
@@ -246,6 +245,7 @@ const styles = StyleSheet.create({
         fontSize:Theme.fonts.fontSizePoint.h5
     },
     form:{
-        marginTop:Theme.sizes[2]
+        marginTop:Theme.sizes[2],
+        marginBottom:Theme.sizes[3]
     }
 })
