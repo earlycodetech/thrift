@@ -50,7 +50,8 @@ function Home ({navigation}) {
                                 size={Theme.fonts.fontSizePoint.h3}
                                 color={Theme.colors.maroon700}/>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.withdraw}>
+                            <TouchableOpacity style={styles.withdraw}
+                            onPress={() => navigation.navigate('Withdraw')}>
                                 <Text style={styles.withdrawText}>Withdraw</Text>
                                 <FontAwesomeIcon icon={faCreditCard} 
                                 size={Theme.fonts.fontSizePoint.h3}

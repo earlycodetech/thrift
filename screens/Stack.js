@@ -13,7 +13,7 @@ export function StackNavigation(){
     return (
         <Stack.Navigator initialRouteName='Sign in' screenOptions={{headerShown:false}}> 
             <Stack.Screen name='About' component={About}/>
-            <Stack.Screen name='Withdraw' component={Withdraw}/>
+            <Stack.Screen name='Withdraw' component={Withdraw} options={{headerShown:true}}/>
             <Stack.Screen name='Loan' component={Loan}/>
             <Stack.Screen name='Sign up' component={Signup}/>
             <Stack.Screen name='Sign in' component={Signin}/>
