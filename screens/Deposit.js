@@ -71,8 +71,6 @@ export function Deposit ({navigation}) {
                                     <TextInput 
                                     placeholder="amount"
                                     mode="contained"
-                                    outlineColor={Theme.colors.purple300}
-                                    activeOutlineColor={Theme.colors.purple500}
                                     style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
                                     keyboardType='number-pad'
                                     onChangeText={handleChange('amount')}
@@ -85,8 +83,6 @@ export function Deposit ({navigation}) {
                                     <TextInput 
                                     placeholder="description"
                                     mode="contained"
-                                    outlineColor={Theme.colors.purple300}
-                                    activeOutlineColor={Theme.colors.purple500}
                                     style={{fontSize:24,color:'#3C4048',marginBottom:Theme.sizes[1]}}
                                     onChangeText={handleChange('desc')}
                                     onBlur={handleBlur('desc')}
