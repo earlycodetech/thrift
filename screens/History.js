@@ -1,6 +1,6 @@
 import { useState,useEffect,useContext } from "react";
 import { AppContext } from "../utils/globals";
-import { View,Text,StyleSheet } from "react-native";
+import { View,Text,StyleSheet,FlatList } from "react-native";
 import { SafeArea } from '../utils/safearea';
 import { Theme } from "../utils/theme";
 import { db } from "../firebase/firebase.settings";
@@ -16,7 +16,7 @@ export function History () {
 
     useEffect(() => {
         onSnapshot(query(queryRef,where('by','==',uid),orderBy('timestamp','desc')),
-        onSnapshotResponse => {
+        (onSnapshotResponse) => {
             const compiledHistory = [];
 
             onSnapshotResponse.forEach((document) => {
@@ -29,7 +29,24 @@ export function History () {
     return (
         <SafeArea>
             <View style={styles.container}>
+                <FlatList
+                data={history}
+                renderItem={({item}) => {
+                    const actualDate = new Date(item.timestamp).toDateString(); 
 
+                    return (
+                        <View style={styles.transBlock}>
+                            <Text style={styles.value}>₦{item.amount}</Text>
+                            {
+                            item.description ? 
+                            <Text style={styles.desc}>{item.description}</Text> : 
+                            <Text style={styles.desc}>Withdrawal by self</Text>
+                            }
+                            <Text style={styles.date}>{actualDate}</Text>
+                        </View>
+                    )
+                }}
+                key={({item}) => item.timestamp}/>
             </View>
         </SafeArea>
     )
@@ -38,6 +55,23 @@ export function History () {
 const styles = StyleSheet.create({
     container:{
         flex:1,
-        marginHorizontal:Theme.sizes[3]
+        paddingHorizontal:Theme.sizes[3]
+    },
+    transBlock:{
+        backgroundColor:Theme.colors.gray100,
+        padding:Theme.sizes[2],
+        marginBottom:Theme.sizes[2]
+    },
+    value:{
+        fontSize:Theme.fonts.fontSizePoint.title,
+        color:'black'
+    },
+    desc:{
+        fontSize:Theme.fonts.fontSizePoint.body,
+        color:Theme.colors.gray500
+    },
+    date:{
+        fontSize:Theme.fonts.fontSizePoint.body,
+        color:Theme.colors.gray500
     }
 })

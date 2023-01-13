@@ -1,7 +1,7 @@
 import { useState,useEffect,useCallback,useContext } from "react";
 import { AppContext } from "../utils/globals";
 import { SafeArea } from "../utils/safearea";
-import { View,Text,StyleSheet,ScrollView, TouchableOpacity,ActivityIndicator } from "react-native";
+import { View,Text,StyleSheet,ScrollView, TouchableOpacity,ActivityIndicator, Alert } from "react-native";
 import { Theme } from '../utils/theme';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Font from 'expo-font';
@@ -90,8 +90,23 @@ export function Signin({navigation}) {
                             });
                         })
                         .catch(error => {
-                            setLoading(false)
-                        }); //to here
+                            setLoading(false);
+                            let errorMsg;
+                            
+                            if(error == 'auth/user-not-found'){
+                                errorMsg = 'The email you entered was not found!';
+                            }else if(error == 'auth/wrong-password'){
+                                errorMsg = 'You have entered an incorrect password!';
+                            }else{
+                                errorMsg = 'We encountered a problem while logging you in';
+                            }
+
+                            Alert.alert(
+                                'Error',
+                                errorMsg,
+                                [{text:'Try again'}]
+                            )
+                        });
 
                         action.resetForm();//clear inputs
                     }}
@@ -139,6 +154,14 @@ export function Signin({navigation}) {
                                     }}>
                                         Sign In
                                     </Button>
+
+                                    <View style={styles.forgotPassword}>
+                                        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+                                        <TouchableOpacity
+                                        onPress={() => navigation.navigate('Reset Password')}>
+                                            <Text style={styles.forgotPasswordAction}>Reset your password</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                             )
                         }}
@@ -174,5 +197,18 @@ const styles = StyleSheet.create({
     },
     form:{
         marginTop:Theme.sizes[2]
+    },
+    forgotPassword:{
+        marginTop:Theme.sizes[3],
+        flexDirection:'row'
+    },
+    forgotPasswordText:{
+        fontSize:Theme.fonts.fontSizePoint.body,
+        color:Theme.colors.gray500,
+        marginRight:Theme.sizes[2]
+    },
+    forgotPasswordAction:{
+        fontSize:Theme.fonts.fontSizePoint.body,
+        color:Theme.colors.blue700
     }
 })
