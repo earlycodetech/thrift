@@ -22,7 +22,7 @@ const formRules = yup.object({
 
     password:yup.string('invalid characters')
     .required('This is a compulsory field')
-})
+});
 
 export function Signin({navigation}) {
     const [appIsReady, setAppIsReady] = useState(false);
