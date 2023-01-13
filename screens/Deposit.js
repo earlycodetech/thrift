@@ -33,7 +33,7 @@ export function Deposit ({navigation}) {
                     onSubmit={(values,action) => {
                         setLoading(true);
                         addDoc(collection(db,'statement'),{
-                            amount:values.amount,
+                            amount:Number(values.amount),
                             description:values.desc,
                             by:uid,
                             to:uid,

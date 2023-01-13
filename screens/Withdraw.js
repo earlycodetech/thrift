@@ -30,7 +30,7 @@ export function Withdraw ({navigation}) {
                     onSubmit={(values,action) => {
                         setLoading(true);
                         addDoc(collection(db,'statement'),{
-                            amount:values.amount,
+                            amount:Number(values.amount),
                             by:uid,
                             timestamp:new Date().getTime()
                         })
